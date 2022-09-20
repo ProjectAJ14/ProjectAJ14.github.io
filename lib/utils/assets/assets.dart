@@ -1,3 +1,3 @@
 class Assets {
-  static const String circular = 'assets/circular.png';
+  static const String icon = 'assets/icon.png';
 }

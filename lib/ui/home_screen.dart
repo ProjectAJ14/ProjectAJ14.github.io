@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 100),
           Center(
             child: Image(
-              image: const AssetImage(Assets.circular),
+              image: const AssetImage(Assets.icon),
               height: size.width * 0.2,
               width: size.width * 0.2,
             ),
