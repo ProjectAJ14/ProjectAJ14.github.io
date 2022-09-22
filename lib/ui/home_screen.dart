@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_site/utils/assets/assets.dart';
 
 import '../data/repos/links_repo.dart';
-import '../data/services/url_service.dart';
+import 'widgets/link_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -54,34 +54,18 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          ...LinkRepo()
-              .links
-              .map(
-                (e) => Center(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 20,
-                        ),
-                        minimumSize: Size(size.width * 0.5, 50),
-                      ),
-                      onPressed: () {
-                        AppURlService.launchURL(e.url);
-                      },
-                      child: Text(
-                        e.title,
-                      ),
-                    ),
+          GridView.count(
+            crossAxisCount: 3,
+            shrinkWrap: true,
+            children: LinkRepo()
+                .links
+                .map(
+                  (e) => LinkWidget(
+                    link: e,
                   ),
-                ),
-              )
-              .toList()
+                )
+                .toList(),
+          )
         ],
       ),
     );
