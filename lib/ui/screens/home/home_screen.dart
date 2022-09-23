@@ -1,10 +1,12 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:im_animations/im_animations.dart';
 import 'package:my_site/utils/assets/assets.dart';
 
 import '../../../data/repos/links_repo.dart';
 import '../../widgets/link_widget.dart';
+import '../../widgets/new_link_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -41,12 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
         padding:
             EdgeInsets.symmetric(horizontal: isMobile ? 16 : size.width / 6),
         children: [
-          const SizedBox(height: 100),
           Center(
-            child: Image(
-              image: const AssetImage(Assets.icon),
-              height: size.width * (isMobile ? 0.25 : 0.15),
-              width: size.width * (isMobile ? 0.25 : 0.15),
+            child: Sonar(
+              radius: size.width * (isMobile ? 0.25 : 0.15),
+              duration: const Duration(seconds: 2),
+              waveColor: theme.errorColor,
+              child: CircleAvatar(
+                radius: size.width * (isMobile ? 0.25 : 0.15),
+                backgroundImage: const AssetImage(Assets.icon),
+              ),
             ),
           )
               .animate()
@@ -133,7 +138,12 @@ class _HomeScreenState extends State<HomeScreen> {
               textAlign: TextAlign.center,
             ),
           ).animate(delay: 500.ms).fade(duration: 500.ms).scale(delay: 500.ms),
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
+          ...LinkRepo.newItems
+              .map((e) => NewLinkWidget(
+                    link: e,
+                  ))
+              .toList(),
         ],
       ).animate(delay: 1000.ms).slide(
             duration: 500.ms,
