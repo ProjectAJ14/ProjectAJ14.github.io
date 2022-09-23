@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'models/links.dart';
 
 class LinkRepo {
@@ -15,7 +13,6 @@ class LinkRepo {
     Link(
       title: 'Github',
       url: 'https://github.com/projectaj14',
-      color: Colors.grey,
     ),
     Link(
       title: 'Stackoverflow',
@@ -32,7 +29,6 @@ class LinkRepo {
     Link(
       title: 'Medium',
       url: 'https://medium.com/@ajay.kumar_12671',
-      color: Colors.white,
     ),
   ];
 

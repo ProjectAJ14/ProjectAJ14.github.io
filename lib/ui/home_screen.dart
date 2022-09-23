@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                 child: AnimatedTextKit(
                   animatedTexts: [
                     TypewriterAnimatedText(
-                      "Ajay Kumar",
+                      "Project_AJ",
                       textStyle: theme.textTheme.headline1!.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
