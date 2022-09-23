@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:my_site/utils/assets/assets.dart';
 
-import '../data/repos/links_repo.dart';
-import 'widgets/link_widget.dart';
+import '../../../data/repos/links_repo.dart';
+import '../../widgets/link_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);

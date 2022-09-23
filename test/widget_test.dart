@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_site/ui/home_screen.dart';
+import 'package:my_site/ui/screens/home/home_screen.dart';
 import 'package:my_site/ui/widgets/link_widget.dart';
 
 void main() {
