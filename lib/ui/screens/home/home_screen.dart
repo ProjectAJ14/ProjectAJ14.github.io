@@ -18,7 +18,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     precacheImage(const AssetImage('assets/icon.png'), context);
-    final links = LinkRepo().links;
+    final links = [
+      ...LinkRepo.topLinks,
+      ...LinkRepo.bottomLinks,
+    ];
     for (int index = 0; index < links.length; index++) {
       String i = links[index].title.toLowerCase();
       String path = 'assets/images/$i.png';
@@ -80,9 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              for (int i = 0; i < LinkRepo().links.length; i++)
+              for (int i = 0; i < LinkRepo.topLinks.length; i++)
                 Expanded(
-                  child: LinkWidget(LinkRepo().links[i], size: 50)
+                  child: LinkWidget(LinkRepo.topLinks[i], size: 50)
                       .animate()
                       .fadeIn(delay: 500.ms, duration: 1000.ms)
                       .then()
@@ -90,6 +93,26 @@ class _HomeScreenState extends State<HomeScreen> {
                         duration: 800.ms,
                         begin: const Offset(0, 0.0),
                         end: i % 2 == 0
+                            ? const Offset(0, 0.3)
+                            : const Offset(0, -0.3),
+                      ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              for (int i = 0; i < LinkRepo.bottomLinks.length; i++)
+                Expanded(
+                  child: LinkWidget(LinkRepo.bottomLinks[i], size: 50)
+                      .animate()
+                      .fadeIn(delay: 500.ms, duration: 1000.ms)
+                      .then()
+                      .slide(
+                        duration: 800.ms,
+                        begin: const Offset(0, 0.0),
+                        end: i == 0 || i == LinkRepo.bottomLinks.length - 1
                             ? const Offset(0, 0.3)
                             : const Offset(0, -0.3),
                       ),
@@ -112,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ).animate().fade(duration: 500.ms).scale(delay: 500.ms),
           const SizedBox(height: 20),
         ],
-      ).animate(delay: 500.ms).slide(
+      ).animate(delay: 1000.ms).slide(
             duration: 500.ms,
             begin: const Offset(0, 0.3),
             end: const Offset(0, 0),
