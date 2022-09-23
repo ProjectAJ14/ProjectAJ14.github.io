@@ -6,8 +6,25 @@ import 'package:my_site/utils/assets/assets.dart';
 import '../../../data/repos/links_repo.dart';
 import '../../widgets/link_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precacheImage(const AssetImage('assets/icon.png'), context);
+    final links = LinkRepo().links;
+    for (int index = 0; index < links.length; index++) {
+      String i = links[index].title.toLowerCase();
+      String path = 'assets/images/$i.png';
+      precacheImage(AssetImage(path), context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +112,11 @@ class HomeScreen extends StatelessWidget {
           ).animate().fade(duration: 500.ms).scale(delay: 500.ms),
           const SizedBox(height: 20),
         ],
-      ),
+      ).animate(delay: 500.ms).slide(
+            duration: 500.ms,
+            begin: const Offset(0, 0.3),
+            end: const Offset(0, 0),
+          ),
     );
   }
 }
