@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: theme.shadowColor,
       body: ListView(
         padding:
-            EdgeInsets.symmetric(horizontal: isMobile ? 16 : size.width / 5),
+            EdgeInsets.symmetric(horizontal: isMobile ? 16 : size.width / 6),
         children: [
           const SizedBox(height: 100),
           Center(
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: size.width * (isMobile ? 0.25 : 0.15),
             ),
           )
-              .animate(delay: 500.ms)
+              .animate()
               .fadeIn(duration: 500.ms)
               .scale()
               .then(
@@ -130,12 +130,12 @@ class _HomeScreenState extends State<HomeScreen> {
               style: theme.textTheme.bodySmall!.copyWith(
                 color: Colors.white,
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.justify,
             ),
           ).animate(delay: 500.ms).fade(duration: 500.ms).scale(delay: 500.ms),
           const SizedBox(height: 20),
         ],
-      ).animate(delay: 500.ms).slide(
+      ).animate(delay: 1000.ms).slide(
             duration: 500.ms,
             begin: const Offset(0, 0.3),
             end: const Offset(0, 0),
