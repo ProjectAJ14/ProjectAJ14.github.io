@@ -13,21 +13,29 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
+    final isMobile = size.width < 500;
 
     return Scaffold(
       backgroundColor: theme.shadowColor,
       body: ListView(
-        padding: EdgeInsets.symmetric(
-            horizontal: size.width > 500 ? size.width / 5 : 16),
+        padding:
+            EdgeInsets.symmetric(horizontal: isMobile ? 16 : size.width / 5),
         children: [
           const SizedBox(height: 100),
           Center(
             child: Image(
               image: const AssetImage(Assets.icon),
-              height: size.width * 0.15,
-              width: size.width * 0.15,
+              height: size.width * (isMobile ? 0.25 : 0.15),
+              width: size.width * (isMobile ? 0.25 : 0.15),
             ),
-          ),
+          )
+              .animate()
+              .fadeIn(duration: 500.ms)
+              .scale()
+              .then(
+                delay: 1000.ms,
+              )
+              .desaturate(),
           const SizedBox(height: 20),
           Center(
             child: SizedBox(
@@ -42,14 +50,10 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
-                      speed: const Duration(milliseconds: 300),
+                      speed: const Duration(milliseconds: 200),
                       textAlign: TextAlign.center,
                     ),
                   ],
-                  totalRepeatCount: 0,
-                  pause: const Duration(milliseconds: 1000),
-                  displayFullTextOnTap: true,
-                  stopPauseOnTap: true,
                   isRepeatingAnimation: false,
                 ),
               ),
@@ -78,7 +82,11 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 40),
           Center(
             child: Text(
-              "Flutter Developer with 5+ years of experience and a demonstrated history of leading high performing teams to develop mobile applications and libraries using Google's Flutter framework since its inception.",
+              "Flutter Developer with 5+ years of experience "
+              "and a demonstrated history of leading high "
+              "performing teams to develop mobile applications "
+              "and libraries using Google's Flutter framework "
+              "since its inception.",
               style: theme.textTheme.bodySmall!.copyWith(
                 color: Colors.white,
               ),
