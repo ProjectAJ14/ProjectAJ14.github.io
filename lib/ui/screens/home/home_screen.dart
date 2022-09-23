@@ -50,12 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           )
               .animate()
-              .fadeIn(duration: 500.ms)
+              .fadeIn(duration: 1000.ms)
               .scale()
               .then(
-                delay: 1000.ms,
+                delay: 500.ms,
               )
-              .desaturate(),
+              .desaturate(duration: 3000.ms),
           const SizedBox(height: 20),
           Center(
             child: SizedBox(
@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: AnimatedTextKit(
                   animatedTexts: [
                     TypewriterAnimatedText(
-                      "Project_AJ",
+                      "Ajay Kumar",
                       textStyle: theme.textTheme.headline1!.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: theme.textTheme.bodySmall!.copyWith(
                 color: Colors.white,
               ),
-              textAlign: TextAlign.justify,
+              textAlign: TextAlign.center,
             ),
           ).animate(delay: 500.ms).fade(duration: 500.ms).scale(delay: 500.ms),
           const SizedBox(height: 20),
