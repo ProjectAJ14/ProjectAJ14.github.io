@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 MaterialColor primaryMaterialColor = const MaterialColor(
   4278854723,
@@ -76,4 +77,5 @@ ThemeData myTheme = ThemeData(
       ),
     ),
   ),
+  textTheme: GoogleFonts.aBeeZeeTextTheme(),
 );
