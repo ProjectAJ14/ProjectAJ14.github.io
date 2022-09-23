@@ -12,7 +12,6 @@ void main() {
     );
     await tester.pumpAndSettle();
     // Render Image from assets
-    expect(find.byType(Text), findsNWidgets(1));
     expect(find.byType(LinkWidget), findsNWidgets(7));
   });
 }
