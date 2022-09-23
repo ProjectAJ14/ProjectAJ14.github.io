@@ -11,6 +11,6 @@ void main() {
       ),
     );
     // Render Image from assets
-    expect(find.byType(Image), findsOneWidget);
+    expect(find.byType(Text), findsNWidgets(2));
   });
 }

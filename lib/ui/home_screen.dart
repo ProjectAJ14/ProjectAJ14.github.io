@@ -54,14 +54,14 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          GridView.count(
-            crossAxisCount: 3,
-            shrinkWrap: true,
+          Wrap(
+            alignment: WrapAlignment.center,
             children: LinkRepo()
                 .links
                 .map(
-                  (e) => LinkWidget(
-                    link: e,
+                  (e) => AppIcon(
+                    e,
+                    size: 50,
                   ),
                 )
                 .toList(),

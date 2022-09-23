@@ -1,15 +1,17 @@
+import 'package:flutter/material.dart';
+
 class Link {
   String id;
   String title;
   String url;
   String description;
-  String image;
+  Color? color;
 
   Link({
     this.id = '',
     this.title = '',
     this.url = '',
     this.description = '',
-    this.image = '',
+    this.color,
   });
 }
