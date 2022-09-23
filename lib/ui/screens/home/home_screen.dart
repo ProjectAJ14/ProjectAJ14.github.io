@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: size.width * (isMobile ? 0.25 : 0.15),
             ),
           )
-              .animate()
+              .animate(delay: 500.ms)
               .fadeIn(duration: 500.ms)
               .scale()
               .then(
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
               for (int i = 0; i < LinkRepo.topLinks.length; i++)
                 Expanded(
                   child: LinkWidget(LinkRepo.topLinks[i], size: 50)
-                      .animate()
+                      .animate(delay: 500.ms)
                       .fadeIn(delay: 500.ms, duration: 1000.ms)
                       .then()
                       .slide(
@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
               for (int i = 0; i < LinkRepo.bottomLinks.length; i++)
                 Expanded(
                   child: LinkWidget(LinkRepo.bottomLinks[i], size: 50)
-                      .animate()
+                      .animate(delay: 500.ms)
                       .fadeIn(delay: 500.ms, duration: 1000.ms)
                       .then()
                       .slide(
@@ -132,10 +132,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               textAlign: TextAlign.center,
             ),
-          ).animate().fade(duration: 500.ms).scale(delay: 500.ms),
+          ).animate(delay: 500.ms).fade(duration: 500.ms).scale(delay: 500.ms),
           const SizedBox(height: 20),
         ],
-      ).animate(delay: 1000.ms).slide(
+      ).animate(delay: 500.ms).slide(
             duration: 500.ms,
             begin: const Offset(0, 0.3),
             end: const Offset(0, 0),
