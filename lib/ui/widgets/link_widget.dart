@@ -11,7 +11,7 @@ class LinkWidget extends StatelessWidget {
   const LinkWidget(
     this.link, {
     Key? key,
-    required this.size,
+    this.size = 50,
   }) : super(key: key);
 
   @override
@@ -23,15 +23,20 @@ class LinkWidget extends StatelessWidget {
       child: Center(
         child: GestureDetector(
           onTap: () => AppURlService.launchURL(link.url),
-          child: Padding(
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: size,
+              maxHeight: size,
+            ),
             padding: const EdgeInsets.all(4.0),
             child: Column(
               children: [
-                Image.asset(
-                  path,
-                  width: size,
-                  height: size,
-                  filterQuality: FilterQuality.high,
+                Expanded(
+                  child: Image.asset(
+                    path,
+                    filterQuality: FilterQuality.high,
+                    fit: BoxFit.contain,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 FittedBox(

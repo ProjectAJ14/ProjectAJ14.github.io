@@ -7,16 +7,22 @@ class DescriptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Text(
-      "Flutter Developer with 5+ years of experience "
-      "and a demonstrated history of leading high "
-      "performing teams to develop mobile applications "
-      "and libraries using Google's Flutter framework "
-      "since its inception.",
-      style: theme.textTheme.bodySmall!.copyWith(
-        color: Colors.white,
-      ),
-      textAlign: TextAlign.center,
-    ).animate(delay: 500.ms).fade(duration: 500.ms).scale(delay: 500.ms);
+    final size = MediaQuery.of(context).size;
+    final isMobile = size.width < 500;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: size.width * (isMobile ? 0.10 : 0.15)),
+      child: Text(
+        "Flutter Developer with 5+ years of experience "
+        "and a demonstrated history of leading high "
+        "performing teams to develop mobile applications "
+        "and libraries using Google's Flutter framework "
+        "since its inception.",
+        style: theme.textTheme.bodySmall!.copyWith(
+          color: Colors.white,
+        ),
+        textAlign: TextAlign.center,
+      ).animate(delay: 500.ms).fade(duration: 500.ms).scale(delay: 500.ms),
+    );
   }
 }

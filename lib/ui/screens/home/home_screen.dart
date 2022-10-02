@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../data/repos/links_repo.dart';
-import '../../../utils/widgets/box_widget.dart';
 import '../../widgets/avatar_widget.dart';
 import '../../widgets/description_widget.dart';
 import '../../widgets/link_widget.dart';
@@ -48,10 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
           const Center(child: AvatarWidget()),
           const SizedBox(height: 20),
           const Center(
-            child: BoxWidget(
-              child: NameWidget(
-                name: 'Ajay Kumar',
-              ),
+            child: NameWidget(
+              name: ' Ajay Kumar',
             ),
           ),
           const SizedBox(height: 40),
@@ -60,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               for (int i = 0; i < LinkRepo.topLinks.length; i++)
                 Expanded(
-                  child: LinkWidget(LinkRepo.topLinks[i], size: 50)
+                  child: LinkWidget(LinkRepo.topLinks[i])
                       .animate(delay: 500.ms)
                       .fadeIn(delay: 500.ms, duration: 1000.ms)
                       .then()
@@ -80,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               for (int i = 0; i < LinkRepo.bottomLinks.length; i++)
                 Expanded(
-                  child: LinkWidget(LinkRepo.bottomLinks[i], size: 50)
+                  child: LinkWidget(LinkRepo.bottomLinks[i])
                       .animate(delay: 500.ms)
                       .fadeIn(delay: 500.ms, duration: 1000.ms)
                       .then()

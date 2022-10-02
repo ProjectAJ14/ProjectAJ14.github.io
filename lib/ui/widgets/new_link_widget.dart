@@ -13,6 +13,7 @@ class NewLinkWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isMobile = size.width < 500;
     return GestureDetector(
       onTap: () => AppURlService.launchURL(link.url),
       child: AspectRatio(
@@ -30,7 +31,7 @@ class NewLinkWidget extends StatelessWidget {
               Center(
                 child: Image.asset(
                   'assets/images/youtube.png',
-                  width: size.width * 0.05,
+                  width: size.width * (isMobile ? 0.15 : 0.05),
                 ),
               )
             ],

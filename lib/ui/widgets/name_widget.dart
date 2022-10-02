@@ -23,6 +23,7 @@ class NameWidget extends StatelessWidget {
             ),
             speed: const Duration(milliseconds: 200),
             textAlign: TextAlign.center,
+            cursor: '_',
           ),
         ],
         isRepeatingAnimation: false,
