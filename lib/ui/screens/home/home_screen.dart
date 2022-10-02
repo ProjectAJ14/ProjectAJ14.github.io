@@ -1,11 +1,12 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:im_animations/im_animations.dart';
-import 'package:my_site/utils/assets/assets.dart';
 
 import '../../../data/repos/links_repo.dart';
+import '../../../utils/widgets/box_widget.dart';
+import '../../widgets/avatar_widget.dart';
+import '../../widgets/description_widget.dart';
 import '../../widgets/link_widget.dart';
+import '../../widgets/name_widget.dart';
 import '../../widgets/new_link_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -40,47 +41,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: theme.shadowColor,
       body: ListView(
-        padding:
-            EdgeInsets.symmetric(horizontal: isMobile ? 16 : size.width / 6),
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 16 : size.width / 6,
+        ),
         children: [
-          Center(
-            child: Sonar(
-              radius: size.width * (isMobile ? 0.25 : 0.15),
-              duration: const Duration(seconds: 2),
-              waveColor: theme.errorColor,
-              child: CircleAvatar(
-                radius: size.width * (isMobile ? 0.25 : 0.15),
-                backgroundImage: const AssetImage(Assets.icon),
-              ),
-            ),
-          )
-              .animate()
-              .fadeIn(duration: 1000.ms)
-              .scale()
-              .then(
-                delay: 500.ms,
-              )
-              .desaturate(duration: 3000.ms),
+          const Center(child: AvatarWidget()),
           const SizedBox(height: 20),
-          Center(
-            child: SizedBox(
-              height: size.width * 0.1,
-              width: size.width * 0.35,
-              child: FittedBox(
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    TypewriterAnimatedText(
-                      "Ajay Kumar",
-                      textStyle: theme.textTheme.headline1!.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      speed: const Duration(milliseconds: 200),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                  isRepeatingAnimation: false,
-                ),
+          const Center(
+            child: BoxWidget(
+              child: NameWidget(
+                name: 'Ajay Kumar',
               ),
             ),
           ),
@@ -125,25 +95,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const SizedBox(height: 40),
-          Center(
-            child: Text(
-              "Flutter Developer with 5+ years of experience "
-              "and a demonstrated history of leading high "
-              "performing teams to develop mobile applications "
-              "and libraries using Google's Flutter framework "
-              "since its inception.",
-              style: theme.textTheme.bodySmall!.copyWith(
-                color: Colors.white,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ).animate(delay: 500.ms).fade(duration: 500.ms).scale(delay: 500.ms),
+          const Center(
+            child: DescriptionWidget(),
+          ),
           const SizedBox(height: 40),
           ...LinkRepo.newItems
-              .map((e) => NewLinkWidget(
-                    link: e,
-                  ))
+              .map((link) => NewLinkWidget(link: link))
               .toList(),
+          const SizedBox(height: 40),
         ],
       ).animate(delay: 1000.ms).slide(
             duration: 500.ms,

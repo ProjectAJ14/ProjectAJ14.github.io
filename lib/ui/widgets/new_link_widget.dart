@@ -15,28 +15,27 @@ class NewLinkWidget extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => AppURlService.launchURL(link.url),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            height: size.width * 0.2,
-            margin: EdgeInsets.symmetric(
-              vertical: 10,
-              horizontal: size.width * 0.1,
-            ),
-            child: Image.network(
-              link.image,
-              color: Colors.black.withOpacity(0.5),
-              colorBlendMode: BlendMode.darken,
-            ),
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: Padding(
+          padding: EdgeInsets.all(size.width * 0.02),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Image.network(
+                link.image,
+                color: Colors.black.withOpacity(0.5),
+                colorBlendMode: BlendMode.darken,
+              ),
+              Center(
+                child: Image.asset(
+                  'assets/images/youtube.png',
+                  width: size.width * 0.05,
+                ),
+              )
+            ],
           ),
-          Center(
-            child: Image.asset(
-              'assets/images/youtube.png',
-              width: size.width * 0.05,
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
