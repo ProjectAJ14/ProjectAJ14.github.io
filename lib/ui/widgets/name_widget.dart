@@ -17,7 +17,7 @@ class NameWidget extends StatelessWidget {
         animatedTexts: [
           TypewriterAnimatedText(
             name,
-            textStyle: theme.textTheme.headline1!.copyWith(
+            textStyle: theme.textTheme.displayLarge!.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),

@@ -8,7 +8,7 @@ class LinkRepo {
         ),
         Link(
           title: 'Youtube',
-          url: 'https://www.youtube.com/channel/UCyV2fy32RyPgOco83tMkR-g',
+          url: 'https://www.youtube.com/@projectaj',
         ),
         Link(
           title: 'Github',
@@ -27,11 +27,11 @@ class LinkRepo {
         ),
         Link(
           title: 'LinkedIn',
-          url: 'https://www.linkedin.com/in/ajay-kumar-586b7a22a/',
+          url: 'https://www.linkedin.com/in/ajaykumar2114/',
         ),
         Link(
           title: 'Medium',
-          url: 'https://medium.com/@ajay.kumar_12671',
+          url: 'https://medium.com/@ajay.kumar_14',
         ),
       ];
 
