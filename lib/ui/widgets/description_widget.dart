@@ -13,7 +13,7 @@ class DescriptionWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(
           horizontal: size.width * (isMobile ? 0.10 : 0.15)),
       child: Text(
-        "Flutter Developer with 5+ years of experience "
+        "Flutter Developer with 7+ years of experience "
         "and a demonstrated history of leading high "
         "performing teams to develop mobile applications "
         "and libraries using Google's Flutter framework "

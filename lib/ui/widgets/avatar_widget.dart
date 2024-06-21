@@ -20,6 +20,7 @@ class AvatarWidget extends StatelessWidget {
       child: CircleAvatar(
         radius: size.width * (isMobile ? 0.25 : 0.15),
         backgroundImage: const AssetImage(Assets.icon),
+        backgroundColor: theme.shadowColor,
       ),
     )
         .animate()

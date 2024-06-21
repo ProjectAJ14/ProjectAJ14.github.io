@@ -16,13 +16,38 @@ class LinkWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String i = link.title.toLowerCase();
-    String path = 'assets/images/$i.png';
+    final image = link.title.toLowerCase();
+    final path = 'assets/images/$image.png';
+
+    void onImageError() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: RichText(
+            text: TextSpan(
+              text: 'Could not load ',
+              children: [
+                TextSpan(
+                  text: link.title,
+                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     return RubberBand(
       delay: 3000.ms,
       child: Center(
         child: GestureDetector(
-          onTap: () => AppURlService.launchURL(link.url),
+          onTap: () => AppURlService.launchURL(
+            link.url,
+            onError: onImageError,
+          ),
           child: Container(
             constraints: BoxConstraints(
               maxWidth: size,

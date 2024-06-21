@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../data/repos/links_repo.dart';
-import '../../../utils/assets/assets.dart';
 import '../../widgets/avatar_widget.dart';
 import '../../widgets/description_widget.dart';
 import '../../widgets/link_widget.dart';
@@ -18,17 +17,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    precacheImage(const AssetImage(Assets.icon), context);
-    final links = [
-      ...LinkRepo.topLinks,
-      ...LinkRepo.bottomLinks,
-    ];
-    for (int index = 0; index < links.length; index++) {
-      String i = links[index].title.toLowerCase();
-      String path = 'assets/images/$i.png';
-      precacheImage(AssetImage(path), context);
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      preCacheImage(context);
+    });
+  }
+
+  void preCacheImage(BuildContext context) {
+    for (var link in [...LinkRepo.topLinks, ...LinkRepo.bottomLinks]) {
+      precacheImage(
+        AssetImage('assets/images/${link.title.toLowerCase()}.png'),
+        context,
+      );
     }
   }
 
