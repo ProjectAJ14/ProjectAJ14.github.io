@@ -22,7 +22,7 @@ ThemeData myTheme = ThemeData(
   primarySwatch: primaryMaterialColor,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(
+      backgroundColor: WidgetStateProperty.all(
         const Color(0xff0a2443),
       ),
     ),
