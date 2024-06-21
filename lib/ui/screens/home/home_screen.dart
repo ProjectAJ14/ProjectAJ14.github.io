@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../data/repos/links_repo.dart';
+import '../../../utils/assets/assets.dart';
 import '../../widgets/avatar_widget.dart';
 import '../../widgets/description_widget.dart';
 import '../../widgets/link_widget.dart';
@@ -19,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    precacheImage(const AssetImage('assets/ajay.png'), context);
+    precacheImage(const AssetImage(Assets.icon), context);
     final links = [
       ...LinkRepo.topLinks,
       ...LinkRepo.bottomLinks,
@@ -34,14 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
-    final isMobile = size.width < 500;
 
     return Scaffold(
       backgroundColor: theme.shadowColor,
       body: ListView(
-        padding: EdgeInsets.symmetric(
-          horizontal: isMobile ? 16 : size.width / 6,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
         ),
         children: [
           const Center(child: AvatarWidget()),

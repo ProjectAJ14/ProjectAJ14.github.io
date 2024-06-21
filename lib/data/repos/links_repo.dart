@@ -4,11 +4,11 @@ class LinkRepo {
   static List<Link> get topLinks => <Link>[
         Link(
           title: 'Instagram',
-          url: 'https://www.instagram.com/codelife.14',
+          url: 'https://www.instagram.com/ajaycodex',
         ),
         Link(
           title: 'Youtube',
-          url: 'https://www.youtube.com/@codelife14',
+          url: 'https://www.youtube.com/channel/UCyV2fy32RyPgOco83tMkR-g',
         ),
         Link(
           title: 'Github',
