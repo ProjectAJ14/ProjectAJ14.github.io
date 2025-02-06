@@ -7,10 +7,9 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
 env:
   FLUTTER_VERSION: '3.27.3'
-  FLUTTER_HOME: '/opt/hostedtoolcache/flutter'
-
 
 jobs:
   build:
@@ -22,8 +21,8 @@ jobs:
       - name: Cache pub packages 🚚
         uses: actions/cache@v4
         with:
-          path: ${{ env.FLUTTER_HOME }}/.pub-cache
-          key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_version }}
+          path: ${{ env.FLUTTER_ROOT }}
+          key: ${{ runner.OS }}-flutter-install-cache-${{ env.FLUTTER_VERSION }}
 
       - name: Set up Flutter 📦
         uses: subosito/flutter-action@v2
