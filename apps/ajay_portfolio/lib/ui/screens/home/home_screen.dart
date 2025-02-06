@@ -20,11 +20,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      preCacheImage(context);
+      preCacheImages(context);
     });
   }
 
-  void preCacheImage(BuildContext context) {
+  void preCacheImages(BuildContext context) {
     for (var link in [...LinkRepo.topLinks, ...LinkRepo.bottomLinks]) {
       precacheImage(
         AssetImage('assets/images/${link.title.toLowerCase()}.png'),
