@@ -1,12 +1,12 @@
+import 'package:ajay_portfolio/data/repos/models/links.dart';
+import 'package:ajay_portfolio/data/services/url_service.dart';
 import 'package:flutter/material.dart';
-import 'package:my_site/data/repos/models/links.dart';
-import 'package:my_site/data/services/url_service.dart';
 
 class NewLinkWidget extends StatelessWidget {
   const NewLinkWidget({
-    Key? key,
+    super.key,
     required this.link,
-  }) : super(key: key);
+  });
 
   final Link link;
 
@@ -50,7 +50,7 @@ class NewLinkWidget extends StatelessWidget {
             children: [
               Image.network(
                 link.image,
-                color: Colors.black.withOpacity(0.5),
+                color: Color.fromRGBO(0, 0, 0, 0.5),
                 colorBlendMode: BlendMode.darken,
               ),
               Center(

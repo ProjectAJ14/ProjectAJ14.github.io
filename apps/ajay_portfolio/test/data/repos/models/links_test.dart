@@ -1,5 +1,5 @@
+import 'package:ajay_portfolio/data/repos/models/links.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_site/data/repos/models/links.dart';
 
 void main() {
 //Test if Link has image

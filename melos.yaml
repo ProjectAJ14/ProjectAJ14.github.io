@@ -1,0 +1,12 @@
+name: ajay_portfolio_workspace
+description: Ajay's Portfolio Website
+
+packages:
+  - apps/ajay_portfolio
+
+command:
+  version:
+    workspaceChangelog: false
+
+scripts:
+  lint: dart format . --set-exit-if-changed && flutter analyze --fatal-infos .

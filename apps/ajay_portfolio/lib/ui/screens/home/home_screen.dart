@@ -9,7 +9,7 @@ import '../../widgets/name_widget.dart';
 import '../../widgets/new_link_widget.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -96,9 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: DescriptionWidget(),
           ),
           const SizedBox(height: 40),
-          ...LinkRepo.newItems
-              .map((link) => NewLinkWidget(link: link))
-              .toList(),
+          ...LinkRepo.newItems.map((link) => NewLinkWidget(link: link)),
           const SizedBox(height: 40),
         ],
       ).animate(delay: 1000.ms).slide(

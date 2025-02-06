@@ -1,8 +1,8 @@
+import 'package:ajay_portfolio/data/repos/models/links.dart';
+import 'package:ajay_portfolio/data/services/url_service.dart';
 import 'package:animate_it/animate_it.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:my_site/data/repos/models/links.dart';
-import 'package:my_site/data/services/url_service.dart';
 
 class LinkWidget extends StatelessWidget {
   final Link link;
@@ -10,9 +10,9 @@ class LinkWidget extends StatelessWidget {
 
   const LinkWidget(
     this.link, {
-    Key? key,
+    super.key,
     this.size = 50,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

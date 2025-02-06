@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class DescriptionWidget extends StatelessWidget {
-  const DescriptionWidget({Key? key}) : super(key: key);
+  const DescriptionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
