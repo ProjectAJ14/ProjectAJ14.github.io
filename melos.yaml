@@ -10,3 +10,14 @@ command:
 
 scripts:
   lint: dart format . --set-exit-if-changed && flutter analyze --fatal-infos .
+  test:select:
+    description: Run tests and generate coverage trace file for a selected package.
+    run: flutter test --no-pub --coverage
+    exec:
+      concurrency: 6
+      orderDependents: true
+    packageFilters:
+      dirExists: test
+  test:
+    run: melos run test:select --no-select
+    description: Run all Flutter tests in this project.

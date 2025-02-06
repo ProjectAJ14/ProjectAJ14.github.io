@@ -38,7 +38,7 @@ jobs:
         run: melos lint
 
       - name: Run Test 🧪
-        run: flutter test
+        run: melos test
 
       - name: Build and Deploy to GitHub Pages 🚀
         uses: bluefireteam/flutter-gh-pages@v7
