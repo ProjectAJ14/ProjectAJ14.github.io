@@ -37,11 +37,27 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    // Calculate padding as per screen width
+    double calculatePadding() {
+      switch (MediaQuery.sizeOf(context).width) {
+        case < 500:
+          return 16;
+        case < 800:
+          return 16 * 4;
+        case < 1000:
+          return 16 * 8;
+        case < 1200:
+          return 16 * 16;
+        default:
+          return 16 * 24;
+      }
+    }
+
     return Scaffold(
       backgroundColor: theme.shadowColor,
       body: ListView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
+        padding: EdgeInsets.symmetric(
+          horizontal: calculatePadding(),
         ),
         children: [
           const Center(child: AvatarWidget()),

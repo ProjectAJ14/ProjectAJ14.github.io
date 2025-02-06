@@ -1,6 +1,7 @@
 import 'package:ajay_portfolio/data/repos/models/links.dart';
 import 'package:ajay_portfolio/data/services/url_service.dart';
 import 'package:animate_it/animate_it.dart';
+import 'package:animate_on_hover/animate_on_hover.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -76,6 +77,9 @@ class LinkWidget extends StatelessWidget {
               ],
             ),
           ),
+        ).increaseSizeOnHover(
+          1.5,
+          duration: 250.ms,
         ),
       ),
     );

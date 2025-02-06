@@ -20,6 +20,7 @@ dependencies:
   flutter_animate: ^4.5.2
   im_animations: ^0.1.2
   animate_it: ^0.0.1+2
+  animate_on_hover: ^1.0.2
 
 dev_dependencies:
   flutter_test:
