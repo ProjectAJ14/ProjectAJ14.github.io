@@ -28,13 +28,13 @@ jobs:
         run: |
           dart pub global activate melos
           dart pub get
-          dart run melos bs --diff=origin/${{ github.base_ref }}
+          dart run melos bs
 
       - name: Lint Check 🧹
-        run: melos lint --diff=origin/${{ github.base_ref }}
+        run: melos lint
 
       - name: Run Test 🧪
-        run: melos test --diff=origin/${{ github.base_ref }}
+        run: melos test
 
 
 
