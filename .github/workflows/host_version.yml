@@ -78,7 +78,7 @@ jobs:
           cp -r ../../apps/ajay_portfolio/build/web/* "${{ env.VERSION }}/"
           
           # Get current date in UTC
-          DEPLOY_DATE=$(date -u +"%Y-%m-%d")
+          DEPLOY_DATE=$(date -u +'%H:%M:%S, %d-%b-%Y')
           
           # Create or update version list with timestamps
           echo "# Available Versions" > index.md
