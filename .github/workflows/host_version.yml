@@ -24,8 +24,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.3'
-          channel: 'stable'
+          flutter-version: '3.37.3'
           cache: true
 
       - name: Setup Melos
@@ -78,18 +77,31 @@ jobs:
           mkdir -p "${{ env.VERSION }}"
           cp -r ../../apps/ajay_portfolio/build/web/* "${{ env.VERSION }}/"
           
+          # Get current date in UTC
+          DEPLOY_DATE=$(date -u +"%Y-%m-%d")
+          
           # Create or update version list with timestamps
-          echo "# Available Versions" > versions.md
-          echo "" >> versions.md
-          echo "| Version | Deployment Date |" >> versions.md
-          echo "|---------|-----------------|" >> versions.md
+          echo "# Available Versions" > index.md
+          echo "" >> index.md
+          echo "| Deployment Date | Version |" >> index.md
+          echo "|-----------------|----------|" >> index.md
+          
+          # Add current version first with today's date
+          echo "| $DEPLOY_DATE | [${{ env.VERSION }}](${{ env.VERSION }}/) |" > temp_versions.txt
+          
+          # Add previous versions
           for d in */ ; do
-            if [[ "$d" =~ ^[0-9]+\.[0-9]+\.[0-9]+/$ ]]; then
+            if [[ "$d" =~ ^[0-9]+\.[0-9]+\.[0-9]+/$ ]] && [ "$d" != "${{ env.VERSION }}/" ]; then
               version="${d%/}"
-              date=$(git log -1 --format="%ad" --date=short -- "$d")
-              echo "| [$version]($version/) | $date |" >> versions.md
+              # Get the last modified date of the directory
+              date=$(stat -c %y "$d" | cut -d' ' -f1)
+              echo "| $date | [$version]($version/) |" >> temp_versions.txt
             fi
           done
+          
+          # Sort by date in reverse order and append to index.md
+          sort -r temp_versions.txt >> index.md
+          rm temp_versions.txt
           
           # Stage, commit and push
           git add .
@@ -101,4 +113,4 @@ jobs:
           echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "✅ Successfully deployed version ${{ env.VERSION }}" >> $GITHUB_STEP_SUMMARY
           echo "📱 Access your app at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${{ env.VERSION }}/" >> $GITHUB_STEP_SUMMARY
-          echo "📋 View all versions at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/versions.md" >> $GITHUB_STEP_SUMMARY
+          echo "📋 View all versions at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/index.md" >> $GITHUB_STEP_SUMMARY
