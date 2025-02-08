@@ -15,16 +15,17 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Required for version extraction
+          fetch-depth: 0
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.27.3'
+          channel: 'stable'
           cache: true
 
       - name: Setup Melos
@@ -49,15 +50,21 @@ jobs:
 
       - name: Run tests
         run: melos run test
-
+      
       - name: Run lint
         run: melos run lint
 
       - name: Build Flutter Web
         run: |
           cd apps/ajay_portfolio
-          flutter build web --release --base-href "/${{ env.VERSION }}/"
-
+          # Build for version directory
+          flutter build web --release --base-href "/versions/${{ env.VERSION }}/"
+          # Build for root (same version)
+          mkdir -p build/web_root
+          cp -r build/web/* build/web_root/
+          cd build/web_root
+          find . -type f -name "*.html" -exec sed -i "s|/versions/${{ env.VERSION }}/|/|g" {} +
+      
       - name: Deploy to GitHub Pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,7 +72,7 @@ jobs:
           mkdir -p tmp
           cd tmp
           
-          # Configure Git globally with GitHub Actions bot identity
+          # Configure Git
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
@@ -73,44 +80,165 @@ jobs:
           git clone --single-branch --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
           cd gh-pages
           
-          # Create version directory and copy new build
-          mkdir -p "${{ env.VERSION }}"
-          cp -r ../../apps/ajay_portfolio/build/web/* "${{ env.VERSION }}/"
+          # Create versions directory if it doesn't exist
+          mkdir -p versions
           
-          # Get current date in UTC
-          DEPLOY_DATE=$(date -u +'%H:%M:%S, %d-%b-%Y')
+          # Deploy version-specific build
+          mkdir -p "versions/${{ env.VERSION }}"
+          cp -r ../../apps/ajay_portfolio/build/web/* "versions/${{ env.VERSION }}/"
           
-          # Create or update version list with timestamps
-          echo "# Available Versions" > index.md
-          echo "" >> index.md
-          echo "| Deployment Date | Version |" >> index.md
-          echo "|-----------------|----------|" >> index.md
+          # Deploy to root (latest version)
+          cp -r ../../apps/ajay_portfolio/build/web_root/* ./
           
-          # Add current version first with today's date
-          echo "| $DEPLOY_DATE | [${{ env.VERSION }}](${{ env.VERSION }}/) |" > temp_versions.txt
+          # Get current UTC timestamp
+          DEPLOY_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          
+          # Create versions index.html
+          cat > versions/index.html << 'EOL'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Versions</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: var(--text-color);
+            font-size: 2rem;
+            border-bottom: 2px solid var(--background-color);
+            padding-bottom: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--background-color);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+
+            th, td {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+    <script>
+        function formatDate(utcDate) {
+            const date = new Date(utcDate);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = date.toLocaleString('default', { month: 'short' });
+            const year = date.getFullYear();
+            return `${hours}:${minutes}:${seconds}, ${day}-${month}-${year}`;
+        }
+
+        window.onload = function() {
+            const timestamps = document.querySelectorAll('time');
+            timestamps.forEach(time => {
+                const utcDate = time.getAttribute('datetime');
+                time.textContent = formatDate(utcDate);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Available Versions</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Deployment Date</th>
+                    <th>Version</th>
+                </tr>
+            </thead>
+            <tbody>
+EOL
+          
+          # Add current version
+          echo "<tr><td><time datetime=\"$DEPLOY_DATE\">$DEPLOY_DATE</time></td><td><a href=\"${{ env.VERSION }}/\">${{ env.VERSION }}</a></td></tr>" >> versions/index.html
           
           # Add previous versions
-          for d in */ ; do
-            if [[ "$d" =~ ^[0-9]+\.[0-9]+\.[0-9]+/$ ]] && [ "$d" != "${{ env.VERSION }}/" ]; then
-              version="${d%/}"
-              # Get the last modified date of the directory
-              date=$(stat -c %y "$d" | cut -d' ' -f1)
-              echo "| $date | [$version]($version/) |" >> temp_versions.txt
+          for d in versions/*/ ; do
+            if [[ "$d" =~ versions/[0-9]+\.[0-9]+\.[0-9]+/$ ]] && [ "$d" != "versions/${{ env.VERSION }}/" ]; then
+              version=$(basename "$d")
+              date=$(stat -c %Y "$d" | xargs -I{} date -u -d @{} +'%Y-%m-%dT%H:%M:%SZ')
+              echo "<tr><td><time datetime=\"$date\">$date</time></td><td><a href=\"$version/\">$version</a></td></tr>" >> versions/index.html
             fi
           done
           
-          # Sort by date in reverse order and append to index.md
-          sort -r temp_versions.txt >> index.md
-          rm temp_versions.txt
+          # Close the HTML file
+          cat >> versions/index.html << 'EOL'
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+EOL
           
           # Stage, commit and push
           git add .
           git commit -m "Deploy version ${{ env.VERSION }}"
           git push
-
+      
       - name: Create deployment summary
         run: |
           echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "✅ Successfully deployed version ${{ env.VERSION }}" >> $GITHUB_STEP_SUMMARY
-          echo "📱 Access your app at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${{ env.VERSION }}/" >> $GITHUB_STEP_SUMMARY
-          echo "📋 View all versions at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/index.md" >> $GITHUB_STEP_SUMMARY
+          echo "📱 Root URL (latest version): https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/" >> $GITHUB_STEP_SUMMARY
+          echo "📱 Versioned URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/versions/${{ env.VERSION }}/" >> $GITHUB_STEP_SUMMARY
+          echo "📋 All versions: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/versions/" >> $GITHUB_STEP_SUMMARY
