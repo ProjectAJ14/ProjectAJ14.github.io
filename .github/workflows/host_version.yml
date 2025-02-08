@@ -1,81 +1,87 @@
-name: Deploy Flutter Web to GitHub Pages
+name: Flutter Web Deploy with Versioning
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
+  release:
+    types: [ created ]
   workflow_dispatch:
     inputs:
       version:
-        description: 'Manual version override (optional)'
+        description: 'Version to deploy (optional - will use pubspec.yaml if not provided)'
         required: false
+        type: string
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.set_version.outputs.version }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
-      - name: Determine version
-        id: set_version
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Required for version extraction
+
+      - name: Extract version from pubspec.yaml
+        id: get_version
+        if: github.event.inputs.version == ''
         run: |
-          if [ -n "${{ github.event.inputs.version }}" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-          else
-            VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}' | sed "s/+.*//")
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          VERSION=$(grep 'version:' pubspec.yaml | sed 's/version: //')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Version extracted from pubspec.yaml: $VERSION"
+
+      - name: Set manual version
+        if: github.event.inputs.version != ''
+        run: |
+          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          echo "Using manually provided version: ${{ github.event.inputs.version }}"
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: '3.19.0'
+          channel: 'stable'
+          cache: true
 
-      - name: Install dependencies
+      - name: Get dependencies
         run: flutter pub get
 
       - name: Build Flutter Web
-        run: flutter build web --release --base-href "/${{ steps.set_version.outputs.version }}/"
+        run: flutter build web --release --base-href "/${{ env.VERSION }}/"
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: web-build
-          path: build/web
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: web-build
-          path: web-build
-
-      - name: Checkout gh-pages
-        uses: actions/checkout@v3
-        with:
-          ref: gh-pages
-          path: gh-pages
-
-      - name: Set up version directory
+      - name: Setup Git Config
         run: |
-          VERSION="${{ needs.build.outputs.version }}"
-          mkdir -p gh-pages/$VERSION
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
 
-      - name: Copy build files
+      - name: Deploy to GitHub Pages
         run: |
-          VERSION="${{ needs.build.outputs.version }}"
-          cp -R web-build/* gh-pages/$VERSION/
-
-      - name: Commit and push changes
-        working-directory: gh-pages
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Create a temporary directory for the gh-pages branch
+          mkdir -p tmp
+          cd tmp
+          
+          # Clone gh-pages branch
+          git clone --single-branch --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
+          cd gh-pages
+          
+          # Create version directory and copy new build
+          mkdir -p "${{ env.VERSION }}"
+          cp -r ../../build/web/* "${{ env.VERSION }}/"
+          
+          # Create or update version list
+          echo "# Available Versions" > versions.md
+          for d in */ ; do
+            if [[ "$d" =~ ^[0-9]+\.[0-9]+\.[0-9]+/$ ]]; then
+              version="${d%/}"
+              echo "- [$version]($version/)" >> versions.md
+            fi
+          done
+          
+          # Stage, commit and push
           git add .
-          git commit -m "Deploy version ${{ needs.build.outputs.version }}"
+          git commit -m "Deploy version ${{ env.VERSION }}"
           git push
+
+      - name: Deployment Status
+        run: |
+          echo "Successfully deployed version ${{ env.VERSION }}"
+          echo "Access your app at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${{ env.VERSION }}/"
