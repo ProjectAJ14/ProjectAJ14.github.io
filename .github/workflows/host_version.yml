@@ -1,14 +1,14 @@
-name: Flutter Web Deploy with Versioning
+name: Flutter Web Deploy with Melos
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   release:
     types: [ created ]
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to deploy (optional - will use pubspec.yaml if not provided)'
+        description: 'Version to deploy (optional - will use package version if not provided)'
         required: false
         type: string
 
@@ -21,13 +21,26 @@ jobs:
         with:
           fetch-depth: 0  # Required for version extraction
 
-      - name: Extract version from pubspec.yaml
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.3'
+          channel: 'stable'
+          cache: true
+
+      - name: Setup Melos
+        run: |
+          dart pub global activate melos
+          melos bootstrap
+
+      - name: Extract version from portfolio package
         id: get_version
         if: github.event.inputs.version == ''
         run: |
+          cd apps/ajay_portfolio
           VERSION=$(grep 'version:' pubspec.yaml | sed 's/version: //')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Version extracted from pubspec.yaml: $VERSION"
+          echo "Version extracted from ajay_portfolio package: $VERSION"
 
       - name: Set manual version
         if: github.event.inputs.version != ''
@@ -35,18 +48,16 @@ jobs:
           echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
           echo "Using manually provided version: ${{ github.event.inputs.version }}"
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.0'
-          channel: 'stable'
-          cache: true
+      - name: Run tests
+        run: melos run test
 
-      - name: Get dependencies
-        run: flutter pub get
+      - name: Run lint
+        run: melos run lint
 
       - name: Build Flutter Web
-        run: flutter build web --release --base-href "/${{ env.VERSION }}/"
+        run: |
+          cd apps/ajay_portfolio
+          flutter build web --release --base-href "/${{ env.VERSION }}/"
 
       - name: Setup Git Config
         run: |
@@ -55,7 +66,6 @@ jobs:
 
       - name: Deploy to GitHub Pages
         run: |
-          # Create a temporary directory for the gh-pages branch
           mkdir -p tmp
           cd tmp
           
@@ -65,14 +75,18 @@ jobs:
           
           # Create version directory and copy new build
           mkdir -p "${{ env.VERSION }}"
-          cp -r ../../build/web/* "${{ env.VERSION }}/"
+          cp -r ../../apps/ajay_portfolio/build/web/* "${{ env.VERSION }}/"
           
-          # Create or update version list
+          # Create or update version list with timestamps
           echo "# Available Versions" > versions.md
+          echo "" >> versions.md
+          echo "| Version | Deployment Date |" >> versions.md
+          echo "|---------|-----------------|" >> versions.md
           for d in */ ; do
             if [[ "$d" =~ ^[0-9]+\.[0-9]+\.[0-9]+/$ ]]; then
               version="${d%/}"
-              echo "- [$version]($version/)" >> versions.md
+              date=$(git log -1 --format="%ad" --date=short -- "$d")
+              echo "| [$version]($version/) | $date |" >> versions.md
             fi
           done
           
@@ -81,7 +95,9 @@ jobs:
           git commit -m "Deploy version ${{ env.VERSION }}"
           git push
 
-      - name: Deployment Status
+      - name: Create deployment summary
         run: |
-          echo "Successfully deployed version ${{ env.VERSION }}"
-          echo "Access your app at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${{ env.VERSION }}/"
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Successfully deployed version ${{ env.VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "📱 Access your app at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${{ env.VERSION }}/" >> $GITHUB_STEP_SUMMARY
+          echo "📋 View all versions at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/versions.md" >> $GITHUB_STEP_SUMMARY
