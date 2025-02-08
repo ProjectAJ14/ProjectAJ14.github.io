@@ -7,6 +7,7 @@ import '../../widgets/description_widget.dart';
 import '../../widgets/link_widget.dart';
 import '../../widgets/name_widget.dart';
 import '../../widgets/new_link_widget.dart';
+import '../../widgets/version_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -111,6 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
           const Center(
             child: DescriptionWidget(),
           ),
+          const SizedBox(height: 40),
+          Center(child: VersionWidget()),
           const SizedBox(height: 40),
           ...LinkRepo.newItems.map((link) => NewLinkWidget(link: link)),
           const SizedBox(height: 40),
