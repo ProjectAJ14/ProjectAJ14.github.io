@@ -6,7 +6,6 @@ import '../../widgets/avatar_widget.dart';
 import '../../widgets/description_widget.dart';
 import '../../widgets/link_widget.dart';
 import '../../widgets/name_widget.dart';
-import '../../widgets/new_link_widget.dart';
 import '../../widgets/version_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -114,8 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 40),
           Center(child: VersionWidget()),
-          const SizedBox(height: 40),
-          ...LinkRepo.newItems.map((link) => NewLinkWidget(link: link)),
           const SizedBox(height: 40),
         ],
       ).animate(delay: 1000.ms).slide(

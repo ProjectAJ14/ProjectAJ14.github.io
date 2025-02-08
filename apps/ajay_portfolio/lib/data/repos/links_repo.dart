@@ -34,17 +34,4 @@ class LinkRepo {
           url: 'https://medium.com/@ajay.kumar_14',
         ),
       ];
-
-  static List<Link> get newItems => <Link>[
-        Link(
-          title: 'Global Selection | Scribble | Flutter 3.3',
-          url: 'https://youtu.be/ckx90v7I_18',
-          image: 'https://i.ibb.co/ZG617z8/maxresdefault.jpg',
-        ),
-        Link(
-          title: 'Passwordless authentication in #flutter and #firebase',
-          url: 'https://youtu.be/JHTSgFl8VH0',
-          image: 'https://i.ibb.co/FW4Sh6M/maxresdefault-1.jpg',
-        ),
-      ];
 }
