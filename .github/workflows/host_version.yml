@@ -24,7 +24,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.3'
+          flutter-version: '3.19.0'
           channel: 'stable'
           cache: true
 
@@ -59,15 +59,16 @@ jobs:
           cd apps/ajay_portfolio
           flutter build web --release --base-href "/${{ env.VERSION }}/"
 
-      - name: Setup Git Config
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-
       - name: Deploy to GitHub Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p tmp
           cd tmp
+          
+          # Configure Git globally with GitHub Actions bot identity
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # Clone gh-pages branch
           git clone --single-branch --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
