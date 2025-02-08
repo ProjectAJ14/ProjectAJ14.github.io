@@ -2,7 +2,7 @@ name: ajay_portfolio_workspace
 description: Ajay's Portfolio Website
 
 packages:
-  - apps/ajay_portfolio
+  - apps/portfolio
 
 command:
   version:

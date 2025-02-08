@@ -1,5 +1,5 @@
-import 'package:ajay_portfolio/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:portfolio/ui/theme/theme.dart';
 
 import 'utils/assets/assets.dart';
 import 'utils/router/app_router.dart';
