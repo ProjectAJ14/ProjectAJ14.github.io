@@ -1,3 +1,7 @@
+## 1.1.2
+
+ - **FIX**: update experience years and correct Instagram link.
+
 ## 1.1.1
 
  - **REFACTOR**: rename ajay_portfolio to portfolio and update related paths.
