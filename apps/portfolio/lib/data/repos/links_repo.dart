@@ -4,7 +4,7 @@ class LinkRepo {
   static List<Link> get topLinks => <Link>[
         Link(
           title: 'Instagram',
-          url: 'https://www.instagram.com/moniyomatrix/',
+          url: 'https://www.instagram.com/iajaykumar_14',
         ),
         Link(
           title: 'Youtube',

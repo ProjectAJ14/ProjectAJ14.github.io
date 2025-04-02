@@ -14,7 +14,7 @@ class DescriptionWidget extends StatelessWidget {
         vertical: 32.0,
       ),
       child: Text(
-        "Flutter Developer with 7+ years of experience "
+        "Flutter Developer with 8+ years of experience "
         "and a demonstrated history of leading high "
         "performing teams to develop mobile applications "
         "and libraries using Google's Flutter framework "
