@@ -8,16 +8,69 @@ command:
   version:
     workspaceChangelog: false
 
+###############################################################################
+# SCRIPTS
+###############################################################################
 scripts:
-  lint: dart format . --set-exit-if-changed && flutter analyze --fatal-infos .
-  test:select:
-    description: Run tests and generate coverage trace file for a selected package.
-    run: flutter test --no-pub --coverage
+  clean:flutter:
+    description: "Run flutter clean in all Flutter packages"
+    run: flutter clean
     exec:
-      concurrency: 6
-      orderDependents: true
+      concurrency: 4
+    packageFilters:
+      flutter: true
+
+  lint:
+    description: "Run format and analyze all packages"
+    run: |
+      dart format --set-exit-if-changed . &&
+      dart analyze --fatal-infos .
+    exec:
+      concurrency: 5
+      failFast: true
+
+  fix:
+    description: "Apply Dart automated fixes to all packages"
+    run: dart fix --apply
+    exec:
+      concurrency: 5
+    packageFilters:
+      dirExists: lib
+
+  fix:dry:
+    description: "Show Dart automated fixes without applying them"
+    run: dart fix --dry-run
+    exec:
+      concurrency: 5
+    packageFilters:
+      dirExists: lib
+
+  generate:
+    description: "Generate code for Dart packages using build_runner"
+    run: dart run build_runner build --delete-conflicting-outputs
+    exec:
+      concurrency: 1
+    packageFilters:
+      dependsOn: build_runner
+
+  test:
+    description: "Run all tests (Dart and Flutter)"
+    run: melos run test:select --no-select
+
+  test:select:
+    description: "Run tests in Flutter packages"
+    run: flutter test --coverage
+    exec:
+      concurrency: 5
+      failFast: true
     packageFilters:
       dirExists: test
-  test:
-    run: melos run test:select --no-select
-    description: Run all Flutter tests in this project.
+
+###############################################################################
+# IDE CONFIGURATION
+###############################################################################
+# Optional: Configure IDE integration
+ide:
+  intellij:
+    enabled: true
+    moduleNamePrefix: ''
